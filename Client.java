@@ -1,6 +1,7 @@
 
 import java.net.*;
 import java.io.*;
+import java.util.*;
 
 public class Client {
     private Socket socket = null;
@@ -51,6 +52,19 @@ public class Client {
     }
 
     public static void main(String args[]){
-        Client client = new Client("127.0.0.1", 5000);
+        Scanner scanner = new Scanner(System.in);
+        List<String> tokens = new ArrayList<>();
+        boolean end = false;
+        int i = 0;
+
+        System.out.println("IP PORT;");
+        while(!end){
+          tokens.add(scanner.nextLine());
+          if(tokens.get(i).equals(";"))
+              end = true;
+          i++;
+        }
+        System.out.println("Attempting Connection: " + tokens.get(i-3) + " " + tokens.get(i-2));
+        Client client = new Client(tokens.get(i-3), Integer.parseInt(tokens.get(i-2)));
     }
 }
