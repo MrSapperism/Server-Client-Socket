@@ -5,17 +5,50 @@ import java.util.*;
 
 public class Client {
     private Socket socket = null;
-    private BufferedReader in = null;
-    private DataOutputStream out = null;
+    private DataInputStream stdin = null; //reads characters from input stream
+    private DataInputStream socket_in = null; //reads chars from socket inputstream
+    private DataOutputStream out = null; //sends character to output stream
 
     public Client (String address, int port){
         try {
             socket = new Socket(address, port);
             System.out.println("Connected: " + address);
-            Reader reader = new InputStreamReader(System.in);
-            in = new BufferedReader(reader);
 
+            //Setting up input streams
+            stdin = new DataInputStream(System.in);
+            socket_in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+            //Setting up output streams
             out = new DataOutputStream(socket.getOutputStream());
+            out.writeUTF("Hello From Client");
+
+            String inputLine, outputLine;
+            inputLine = outputLine = "INIT";
+
+            System.out.println("Accepting input");
+
+            outputLine = socket_in.readUTF();
+            if(outputLine != null ) System.out.println(outputLine);
+
+            while(true){
+
+                if(stdin.available() > 0){
+                    inputLine = stdin.readLine();
+                    if(inputLine.equals("Over")){
+                        out.writeUTF("Over");
+                        break;
+                    }
+                }
+                if (inputLine != null) out.writeUTF(inputLine);
+
+                if(socket_in.available() > 0)
+                    outputLine = socket_in.readUTF();
+                if (outputLine != null) System.out.println("Server:" + outputLine);
+
+                inputLine = null;
+                outputLine = null;
+            }
+
         }
         catch(UnknownHostException u){
             System.out.println("Unknown Host");
@@ -23,48 +56,19 @@ public class Client {
         }
         catch(IOException i){
             System.out.println(i);
-            System.out.println("IO Exception 1");
-        }
-
-        String line = "";
-
-        while(!line.equals("Over")){
-            try{
-                line = in.readLine();
-                out.writeUTF(line);
-            }
-            catch(IOException i){
-                System.out.println("IO Exception 2");
-                System.out.println(i);
-                break;
-            }
-        }
-        try {
-            in.close();
-            out.close();
-            socket.close();
-        }
-        catch(IOException i){
-            System.out.println(i);
-            System.out.println("IO Exception 3");
+            System.out.println("Server not present");
+            System.exit(0);
         }
 
     }
 
-    public static void main(String args[]){
-        Scanner scanner = new Scanner(System.in);
-        List<String> tokens = new ArrayList<>();
-        boolean end = false;
-        int i = 0;
 
-        System.out.println("IP PORT;");
-        while(!end){
-          tokens.add(scanner.nextLine());
-          if(tokens.get(i).equals(";"))
-              end = true;
-          i++;
-        }
-        System.out.println("Attempting Connection: " + tokens.get(i-3) + " " + tokens.get(i-2));
-        Client client = new Client(tokens.get(i-3), Integer.parseInt(tokens.get(i-2)));
+    public static void main(String args[]){
+
+        String addr = "127.0.0.1";
+        int port = 5000;
+
+        System.out.println("Attempting Connection: " + addr + ":" + port);
+        Client client = new Client(addr, port);
     }
 }
