@@ -2,8 +2,13 @@
 
 Note: Requires JDK11
 
-1. javac Server.java
-2. javac Client.java
-3. java Server
-4. java Client
-5. \<IP-Address of Server> \n <5000> \n ;
+##Installing the required libraries
+sudo bash install.sh
+
+##Building the Client and Server
+bash build.sh
+  - can also build with javac Server.java Client.java
+
+##Running the Client and Server
+java Server
+java Client
