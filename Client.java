@@ -5,9 +5,9 @@ import java.util.*;
 
 public class Client {
     private Socket socket = null;
-    private BufferedReader stdin = null; //reads characters from input stream
-    private BufferedReader socket_in = null; //reads chars from socket inputstream
-    private PrintWriter out = null; //sends character to output stream
+    private DataInputStream stdin = null; //reads characters from input stream
+    private DataInputStream socket_in = null; //reads chars from socket inputstream
+    private DataOutputStream out = null; //sends character to output stream
 
     public Client (String address, int port){
         try {
@@ -15,27 +15,38 @@ public class Client {
             System.out.println("Connected: " + address);
 
             //Setting up input streams
-            stdin = new BufferedReader(new InputStreamReader(System.in));
-            socket_in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            stdin = new DataInputStream(System.in);
+            socket_in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
             //Setting up output streams
-            out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("Hello From Client");
+            out = new DataOutputStream(socket.getOutputStream());
+            out.writeUTF("Hello From Client");
 
             String inputLine, outputLine;
             inputLine = outputLine = "INIT";
 
             System.out.println("Accepting input");
 
+            outputLine = socket_in.readUTF();
+            if(outputLine != null ) System.out.println(outputLine);
+
             while(true){
 
-                inputLine = stdin.readLine();
-                outputLine = socket_in.readLine();
+                if(stdin.available() > 0){
+                    inputLine = stdin.readLine();
+                    if(inputLine.equals("Over")){
+                        out.writeUTF("Over");
+                        break;
+                    }
+                }
+                if (inputLine != null) out.writeUTF(inputLine);
 
-                System.out.println("Writing:" + inputLine);
-                if (inputLine != null) out.println(inputLine);
-
+                if(socket_in.available() > 0)
+                    outputLine = socket_in.readUTF();
                 if (outputLine != null) System.out.println("Server:" + outputLine);
+
+                inputLine = null;
+                outputLine = null;
             }
 
         }

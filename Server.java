@@ -7,7 +7,7 @@ public class Server {
     private Socket socket = null;
     private ServerSocket server = null;
     private DataInputStream in = null;
-    private DataOutputStream = null;
+    private DataOutputStream out = null;
 
     public Server(int port)
     {
@@ -32,11 +32,17 @@ public class Server {
             // reads message from client until "Over" is sent
             System.out.println("Starting to read");
 
-            while (!line.equals("FIN"))
+            while (!line.equals("Over"))
             {
-                line = in.readLine();
+                line = in.readUTF();
                 System.out.println(line);
-                if(line.equals("HI")) out.println("HELLO");
+
+                if(line.equals("HI")){
+                    System.out.println("RESPONDING:HELLO");
+                    out.writeUTF("HELLO");
+                } /* else if(line != null){
+                    out.writeUTF("RESC");
+                    } else {} */
             }
             System.out.println("Closing connection");
 
