@@ -1,74 +1,77 @@
-
 import java.net.*;
 import java.io.*;
-import java.util.*;
 
 public class Client {
-    private Socket socket = null;
-    private DataInputStream stdin = null; //reads characters from input stream
-    private DataInputStream socket_in = null; //reads chars from socket inputstream
-    private DataOutputStream out = null; //sends character to output stream
+    private Socket clientSocket;
+    private DataOutputStream out;
+    private BufferedReader in;
 
-    public Client (String address, int port){
+    public void startConnection(final String ip, final int port) {
         try {
-            socket = new Socket(address, port);
-            System.out.println("Connected: " + address);
-
-            //Setting up input streams
-            stdin = new DataInputStream(System.in);
-            socket_in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-
-            //Setting up output streams
-            out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF("HELO");
-
-            String inputLine, outputLine;
-            inputLine = outputLine = "INIT";
-
-            System.out.println("Accepting input");
-
-            outputLine = socket_in.readUTF();
-            if(outputLine != null ) System.out.println(outputLine);
-
-            while(true){
-
-                if(stdin.available() > 0){
-                    inputLine = stdin.readLine();
-                    if(inputLine.equals("Over")){
-                        out.writeUTF("Over");
-                        break;
-                    }
-                }
-                if (inputLine != null) out.writeUTF(inputLine);
-
-                if(socket_in.available() > 0)
-                    outputLine = socket_in.readUTF();
-                if (outputLine != null) System.out.println("Server:" + outputLine);
-
-                inputLine = null;
-                outputLine = null;
-            }
-
+            clientSocket = new Socket(ip, port);
+            out = new DataOutputStream(clientSocket.getOutputStream());
+            in = new BufferedReader(
+                     new InputStreamReader(clientSocket.getInputStream()));
+        } catch(final Exception e){
+            System.out.println(e);
         }
-        catch(UnknownHostException u){
-            System.out.println("Unknown Host");
-            System.out.println(u);
-        }
-        catch(IOException i){
-            System.out.println(i);
-            System.out.println("Server not present");
-            System.exit(0);
-        }
+     }
 
+    public String sendMessage(final String msg) {
+        char resp[] = new char[200];
+        try{
+            out.write(msg.getBytes());
+            out.flush();
+            in.read(resp);
+            return new String(resp);
+        } catch(final Exception e){
+            System.out.println(e);
+        }
+        return new String(resp);
     }
 
+    public void stopConnection() {
+        try {
+            in.close();
+            out.close();
+            clientSocket.close();
+        } catch(final Exception e){
+            System.out.println(e);
+        } finally {
+        }
+    }
 
-    public static void main(String args[]){
+    public static void main(final String args[]){
 
-        String addr = "127.0.0.1";
-        int port = 5000;
+        final String addr = "127.0.0.1";
+        final int port = 50000;
 
         System.out.println("Attempting Connection: " + addr + ":" + port);
-        Client client = new Client(addr, port);
+
+        final Client client = new Client();
+        client.startConnection("127.0.0.1", 50000);
+
+        String in_msg = "";
+        int job_id = 0;
+        in_msg = client.sendMessage("HELO");
+        System.out.println(in_msg);
+        in_msg = client.sendMessage("AUTH comp355");
+        System.out.println(in_msg);
+        in_msg = client.sendMessage("REDY");
+        System.out.println(in_msg);
+        if(in_msg.contains("JOBN")){
+            String[] res = in_msg.split(" ");
+            in_msg = client.sendMessage("RESC ALL" +
+                                        " " + res[4] +
+                                        " " + res[5] +
+                                        " " + res[6]);
+            System.out.println(in_msg);
+            in_msg = client.sendMessage("SCHD 0 large 0 ");
+            System.out.println(in_msg);
+        } else {
+            in_msg = client.sendMessage("QUIT");
+        }
+        System.out.println(in_msg);
     }
+
 }
