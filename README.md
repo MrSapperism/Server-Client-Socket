@@ -12,7 +12,13 @@ bash build.sh
   - can also build with ```javac Server.java Client.java```
 
 ## Running the Client and Server
-```java
+```bash
 java Server
+java Client
+```
+
+## Running the Client with DS-SERVER
+```bash
+./ds-server -c config_simple1.xml -v all
 java Client
 ```
