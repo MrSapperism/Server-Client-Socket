@@ -20,7 +20,7 @@ public class Client {
 
             //Setting up output streams
             out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF("Hello From Client");
+            out.writeUTF("HELO");
 
             String inputLine, outputLine;
             inputLine = outputLine = "INIT";
