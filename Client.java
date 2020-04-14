@@ -74,25 +74,25 @@ public class Client {
 		System.out.println(in_msg);
 		in_msg = client.sendMessage("AUTH root");
 		System.out.println(in_msg);
-		if (in_msg.equals("OK")){
+		if (in_msg.contains("OK")){
 			try {
 				Parser parser = new Parser("./ds-sim/system.xml");
+				System.out.println("Parsing system.xml");
 				Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
 				parser.convertAttribs(server_root.getElementsByTagName("server"), serverConfig);
 			} catch(Exception e){
 				e.printStackTrace();
 			}
 		}
-		System.out.println(serverConfig.toString());
-		/*
-			in_msg = client.sendMessage("REDY");
+		System.out.println(serverConfig.getLargest().toString());
+
+		in_msg = client.sendMessage("REDY");
 		while (in_msg.contains("JOBN")) {
-			final String[] res = status.split(" ");
-			res[2]
-			client.schedule_job(in_msg);
+			final String[] res = in_msg.split(" ");
+			String status = client.schedule_job(res[2], serverConfig.getLargest());
+			System.out.println(status);
 			in_msg = client.sendMessage("REDY");
 		}
-		*/
 		System.out.println(in_msg);
 		client.sendMessage("QUIT");
 	}
