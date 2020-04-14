@@ -1,82 +1,105 @@
 import java.net.*;
 import java.io.*;
+import com.Parser;
+import com.Server;
+import com.ServerConfig;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 
 public class Client {
-    private Socket clientSocket;
-    private DataOutputStream out;
-    private BufferedReader in;
+	private Socket clientSocket;
+	private DataOutputStream out;
+	private BufferedReader in;
+	private String ipAddress;
+	private int port;
 
-    public void startConnection(final String ip, final int port) {
-        try {
-            clientSocket = new Socket(ip, port);
-            out = new DataOutputStream(clientSocket.getOutputStream());
-            in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-        } catch (final Exception e) {
-            System.out.println(e);
-        }
-    }
+	public Client(final String ip, final int port){
+		this.ipAddress = ip;
+		this.port = port;
+	}
 
-    public String sendMessage(final String msg) {
-        final char resp[] = new char[200];
-        try {
-            out.write(msg.getBytes());
-            out.flush();
-            in.read(resp);
-            return new String(resp);
-        } catch (final Exception e) {
-            System.out.println(e);
-        }
-        return new String(resp);
-    }
+	public void startConnection() {
+		try {
+			System.out.println("Attempting Connection: " + this.ipAddress + ":" + this.port);
+			clientSocket = new Socket(this.ipAddress, this.port);
+			out = new DataOutputStream(clientSocket.getOutputStream());
+			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		} catch (final Exception e) {
+			System.out.println(e);
+		}
+	}
 
-    public void stopConnection() {
-        try {
-            in.close();
-            out.close();
-            clientSocket.close();
-        } catch (final Exception e) {
-            System.out.println(e);
-        } finally {
-        }
-    }
+	public String sendMessage(final String msg) {
+		final char resp[] = new char[200];
+		try {
+			out.write(msg.getBytes());
+			out.flush();
+			in.read(resp);
+			return new String(resp);
+		} catch (final Exception e) {
+			System.out.println(e);
+		}
+		return new String(resp);
+	}
 
-    public void shcedule_job(String status){
-        final String[] res = status.split(" ");
-        status =this.sendMessage("SCHD "+ res[2]+" large 0");
-        System.out.println(status);
+	public void stopConnection() {
+		try {
+			in.close();
+			out.close();
+			clientSocket.close();
+		} catch (final Exception e) {
+			System.out.println(e);
+		} finally {
+		}
+	}
 
-    }
+	String schedule_job(String jobID, Server server) {
+		String status = this.sendMessage("SCHD " + jobID + " " + server.getType() + " 0");
+		return status;
+	}
 
-    public static void main(final String args[]){
+	public static void main(final String args[]) {
 
-        final String addr = "127.0.0.1";
-        final int port = 50000;
+		final Client client = new Client("127.0.0.1", 50000);
+		client.startConnection();
 
-        System.out.println("Attempting Connection: " + addr + ":" + port);
+		ServerConfig serverConfig = new ServerConfig();
 
-        final Client client = new Client();
-        client.startConnection("127.0.0.1", 50000);
-
-        String in_msg = "";
-        final int job_id = 0;
-        in_msg = client.sendMessage("HELO");
-        System.out.println(in_msg);
-        in_msg = client.sendMessage("AUTH root");
-        System.out.println(in_msg);
-        in_msg = client.sendMessage("REDY");
-        while(in_msg.contains("JOBN")){
-            client.shcedule_job(in_msg);
-            in_msg = client.sendMessage("REDY");
-        }
-
-        System.out.println(in_msg);
-        client.sendMessage("QUIT");
-    }
+		String in_msg = "";
+		in_msg = client.sendMessage("HELO");
+		System.out.println(in_msg);
+		in_msg = client.sendMessage("AUTH root");
+		System.out.println(in_msg);
+		if (in_msg.equals("OK")){
+			try {
+				Parser parser = new Parser("./ds-sim/system.xml");
+				Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
+				parser.convertAttribs(server_root.getElementsByTagName("server"), serverConfig);
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		System.out.println(serverConfig.toString());
+		/*
+			in_msg = client.sendMessage("REDY");
+		while (in_msg.contains("JOBN")) {
+			final String[] res = status.split(" ");
+			res[2]
+			client.schedule_job(in_msg);
+			in_msg = client.sendMessage("REDY");
+		}
+		*/
+		System.out.println(in_msg);
+		client.sendMessage("QUIT");
+	}
 
 }
 
-/*in_msg = client.sendMessage("RESC ALL" +
-  " " + res[4] +
-  " " + res[5] +
-  " " + res[6]);
-*/
+/*
+ * in_msg = client.sendMessage("RESC ALL" + " " + res[4] + " " + res[5] + " " +
+ * res[6]);
+ */
