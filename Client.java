@@ -73,7 +73,7 @@ public class Client {
 		System.out.println(in_msg);
 		if (in_msg.contains("OK")){
 			try {
-				TimeUnit.SECONDS.sleep(3);
+				TimeUnit.SECONDS.sleep(10);
 				Parser parser = new Parser("./ds-sim/system.xml");
 				System.out.println("Parsing system.xml");
 				Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
