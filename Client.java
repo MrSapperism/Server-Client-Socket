@@ -42,7 +42,7 @@ public class Client {
 
     public void shcedule_job(String status){
         final String[] res = status.split(" ");
-        status =this.sendMessage("SCHD "+ res[2]+" large 0 ");
+        status =this.sendMessage("SCHD "+ res[2]+" large 0");
         System.out.println(status);
 
     }
@@ -61,7 +61,7 @@ public class Client {
         final int job_id = 0;
         in_msg = client.sendMessage("HELO");
         System.out.println(in_msg);
-        in_msg = client.sendMessage("AUTH comp355");
+        in_msg = client.sendMessage("AUTH root");
         System.out.println(in_msg);
         in_msg = client.sendMessage("REDY");
         while(in_msg.contains("JOBN")){
