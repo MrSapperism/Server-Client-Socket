@@ -1,13 +1,10 @@
 import java.net.*;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
 import com.Parser;
 import com.Server;
 import com.ServerConfig;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 public class Client {
@@ -76,6 +73,7 @@ public class Client {
 		System.out.println(in_msg);
 		if (in_msg.contains("OK")){
 			try {
+				TimeUnit.SECONDS.sleep(3);
 				Parser parser = new Parser("./ds-sim/system.xml");
 				System.out.println("Parsing system.xml");
 				Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
