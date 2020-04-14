@@ -1,63 +1,77 @@
 
-import java.net.*;
-import java.io.*;
+class Server {
+	int bootupTime;
+	int coreCount;
+	int disk;
+	int limit;
+	int memory;
+	float rate;
+	String type;
 
-public class Server {
+	public Server(String type, int bootupTime, int coreCount, int disk, int limit, int memory, float rate){
+		setType(type);
+		setBootupTime(bootupTime);
+		setCoreCount(coreCount);
+		setDisk(disk);
+		setLimit(limit);
+		setMemory(memory);
+		setRate(rate);
+	}
 
-    private Socket socket = null;
-    private ServerSocket server = null;
-    private DataInputStream in = null;
-    private DataOutputStream out = null;
+	int getBootupTime(){
+		return this.bootupTime;
+	}
 
-    public Server(int port)
-    {
-        // starts server and waits for a connection
-        try
-        {
-            server = new ServerSocket(port);
-            System.out.println("Server started...\n\tWaiting for Client...");
+	int getCoreCount(){
+		return this.coreCount;
+	}
 
-            socket = server.accept();
-            System.out.println("Client accepted");
+	int getDisk(){
+		return this.disk;
+	}
 
-            // Setting up input stream
-            in = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+	int getLimit(){
+		return this.limit;
+	}
 
-            // Setting up output stream
-            out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF("Hello From Server");
+	int getMemory(){
+		return this.memory;
+	}
 
-            String line = "";
+	float getRate(){
+		return this.rate;
+	}
 
-            // reads message from client until "Over" is sent
-            System.out.println("Starting to read");
+	String getType(){
+		return this.type;
+	}
 
-            while (!line.equals("Over"))
-            {
-                line = in.readUTF();
-                System.out.println(line);
+	void setBootupTime(int bootupTime){
+		this.bootupTime = bootupTime;
+	}
 
-                if(line.equals("HI")){
-                    System.out.println("RESPONDING:HELLO");
-                    out.writeUTF("HELLO");
-                } /* else if(line != null){
-                    out.writeUTF("RESC");
-                    } else {} */
-            }
-            System.out.println("Closing connection");
+	void setCoreCount(int coreCount){
+		this.coreCount = coreCount;
+	}
 
-            // close connection
-            socket.close();
-            in.close();
-        }
-        catch(IOException i)
-        {
-            System.out.println(i);
-        }
-    }
+	void setDisk(int disk){
+		this.disk = disk;
+	}
 
-    public static void main(String args[])
-    {
-        Server server = new Server(5000); 
-    }
+	void setLimit(int limit){
+		this.limit = limit;
+	}
+
+	void setMemory(int memory){
+		this.memory = memory;
+	}
+
+	void setRate(float rate){
+		this.rate = rate;
+	}
+
+	void setType(String type){
+		this.type = type;
+	}
+
 }
