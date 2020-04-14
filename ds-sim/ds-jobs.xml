@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- job list for ds-sim@MQ, 6-Mar, 2020 @ MQ -->
+<jobs>
+	<type name="instant" minRunTime="1" maxRunTime="10" populationRate="40" />
+	<type name="short" minRunTime="11" maxRunTime="300" populationRate="30" />
+	<type name="medium" minRunTime="301" maxRunTime="1800" populationRate="20" />
+	<type name="long" minRunTime="1801" maxRunTime="100000" populationRate="10" />
+	<job id="0" type="medium" submitTime="29" estRunTime="661" cores="1" memory="100" disk="500" />
+	<job id="1" type="instant" submitTime="37" estRunTime="2" cores="4" memory="3400" disk="1900" />
+	<job id="2" type="short" submitTime="47" estRunTime="193" cores="8" memory="7800" disk="7300" />
+	<job id="3" type="short" submitTime="56" estRunTime="315" cores="7" memory="2900" disk="8800" />
+	<job id="4" type="short" submitTime="69" estRunTime="416" cores="7" memory="6500" disk="5700" />
+	<job id="5" type="short" submitTime="89" estRunTime="275" cores="3" memory="1800" disk="2200" />
+	<job id="6" type="instant" submitTime="93" estRunTime="3" cores="2" memory="1300" disk="3700" />
+	<job id="7" type="instant" submitTime="114" estRunTime="7" cores="5" memory="3300" disk="8700" />
+	<job id="8" type="instant" submitTime="129" estRunTime="4" cores="4" memory="3900" disk="5400" />
+	<job id="9" type="short" submitTime="139" estRunTime="207" cores="4" memory="1100" disk="5200" />
+	<job id="10" type="short" submitTime="141" estRunTime="386" cores="1" memory="700" disk="1000" />
+	<job id="11" type="instant" submitTime="151" estRunTime="7" cores="6" memory="2200" disk="11300" />
+	<job id="12" type="medium" submitTime="153" estRunTime="686" cores="7" memory="1500" disk="12600" />
+	<job id="13" type="short" submitTime="156" estRunTime="125" cores="3" memory="3100" disk="3300" />
+	<job id="14" type="instant" submitTime="158" estRunTime="3" cores="4" memory="3700" disk="4600" />
+	<job id="15" type="instant" submitTime="160" estRunTime="2" cores="1" memory="300" disk="1500" />
+	<job id="16" type="instant" submitTime="164" estRunTime="5" cores="4" memory="3700" disk="600" />
+	<job id="17" type="short" submitTime="166" estRunTime="36" cores="2" memory="2000" disk="1200" />
+	<job id="18" type="instant" submitTime="172" estRunTime="8" cores="1" memory="900" disk="700" />
+	<job id="19" type="medium" submitTime="177" estRunTime="130" cores="7" memory="2500" disk="1000" />
+	<job id="20" type="instant" submitTime="179" estRunTime="5" cores="2" memory="500" disk="2300" />
+	<job id="21" type="medium" submitTime="181" estRunTime="2" cores="7" memory="5000" disk="11400" />
+	<job id="22" type="instant" submitTime="182" estRunTime="3" cores="3" memory="1400" disk="6000" />
+	<job id="23" type="instant" submitTime="187" estRunTime="5" cores="7" memory="3300" disk="3600" />
+	<job id="24" type="medium" submitTime="192" estRunTime="2161" cores="5" memory="4900" disk="1300" />
+	<job id="25" type="medium" submitTime="198" estRunTime="1124" cores="2" memory="1800" disk="1200" />
+	<job id="26" type="short" submitTime="203" estRunTime="108" cores="4" memory="1400" disk="5100" />
+	<job id="27" type="instant" submitTime="206" estRunTime="7" cores="3" memory="400" disk="500" />
+	<job id="28" type="short" submitTime="210" estRunTime="127" cores="6" memory="5000" disk="11700" />
+	<job id="29" type="instant" submitTime="211" estRunTime="7" cores="1" memory="300" disk="1800" />
+	<job id="30" type="long" submitTime="213" estRunTime="75990" cores="8" memory="2800" disk="11200" />
+	<job id="31" type="short" submitTime="214" estRunTime="187" cores="1" memory="900" disk="600" />
+	<job id="32" type="short" submitTime="216" estRunTime="25" cores="5" memory="1700" disk="6400" />
+	<job id="33" type="medium" submitTime="219" estRunTime="1142" cores="4" memory="2200" disk="7100" />
+	<job id="34" type="instant" submitTime="222" estRunTime="3" cores="4" memory="2300" disk="5300" />
+	<job id="35" type="instant" submitTime="226" estRunTime="12" cores="6" memory="2700" disk="6100" />
+	<job id="36" type="instant" submitTime="227" estRunTime="4" cores="1" memory="300" disk="1700" />
+	<job id="37" type="instant" submitTime="237" estRunTime="3" cores="1" memory="200" disk="2000" />
+	<job id="38" type="instant" submitTime="238" estRunTime="6" cores="1" memory="400" disk="200" />
+	<job id="39" type="short" submitTime="255" estRunTime="201" cores="1" memory="500" disk="300" />
+	<job id="40" type="medium" submitTime="265" estRunTime="261" cores="2" memory="2000" disk="1600" />
+	<job id="41" type="long" submitTime="266" estRunTime="1529" cores="1" memory="100" disk="1100" />
+	<job id="42" type="instant" submitTime="275" estRunTime="3" cores="2" memory="1200" disk="2200" />
+	<job id="43" type="instant" submitTime="310" estRunTime="13" cores="2" memory="1800" disk="1600" />
+	<job id="44" type="medium" submitTime="314" estRunTime="580" cores="2" memory="2100" disk="2300" />
+	<job id="45" type="medium" submitTime="321" estRunTime="1745" cores="2" memory="1400" disk="1800" />
+	<job id="46" type="short" submitTime="363" estRunTime="408" cores="1" memory="700" disk="600" />
+	<job id="47" type="instant" submitTime="388" estRunTime="6" cores="1" memory="900" disk="1800" />
+	<job id="48" type="medium" submitTime="445" estRunTime="1158" cores="5" memory="2600" disk="4300" />
+	<job id="49" type="medium" submitTime="489" estRunTime="1025" cores="1" memory="1000" disk="1800" />
+</jobs>
