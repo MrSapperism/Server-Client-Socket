@@ -4,10 +4,10 @@ import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import com.Parser; 
-import com.Server; //Parser,server and server config 
-imported into this client class //are not java libraries but other areas of our assignemnt
+import com.Server; 
 import com.ServerConfig;
 import org.w3c.dom.Element;
+//com.Server and Server.config are not java libraries but other areas of our assignment
 
 import static java.lang.System.exit;
 //Above we have important all of the libraries we will use for this Client side dataset. 
@@ -19,7 +19,8 @@ public class Client {
 	private String ipAddress;
 	private int port;
 
-	public Client(final String ip, final int port){ //This code sets the public Client class as the IP Address as well as port number of the Client side
+	public Client(final String ip, final int port){ 
+		//This code sets the public Client class as the IP Address as well as port number of the Client side
  		this.ipAddress = ip; 
 		this.port = port;
 	}
@@ -38,11 +39,14 @@ public class Client {
 		int noOfChar = in.read(resp);
 		return new String(resp, 0, noOfChar);
 	}
-
-	public void stopConnection() throws IOException { //This code block is used to stop connections. 
-		in.close(); //input is closed
-		out.close(); //output is closed
-		clientSocket.close();//clientsocket is closed 
+	//This code block is used to stop connections. 
+	public void stopConnection() throws IOException { 
+		in.close();
+		//input is closed
+		out.close();
+		//output is closed
+		clientSocket.close();
+		//clientsocket is closed 
 	}
 
 	public String schedule_job(String jobID, Server server) throws IOException{
@@ -53,9 +57,11 @@ public class Client {
 	public static void main(final String args[]) throws	IOException {
 
 		final Client client = new Client("127.0.0.1", 50000);
-		client.startConnection();//start connection
+		client.startConnection();
+		//code above start connection
 
-		ServerConfig serverConfig = new ServerConfig(); //apply the server configuration 
+		ServerConfig serverConfig = new ServerConfig(); 
+		//code above applies the server configuration 
 		//code bellow is relevant between creating the communication between client and server side 
 		String in_msg = "";
 		in_msg = client.sendMessage("HELO");
