@@ -1,15 +1,10 @@
 import java.net.*;
 import java.io.*;
-import java.sql.SQLOutput;
-import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import com.Parser;
 import com.Server;
 import com.ServerConfig;
 import org.w3c.dom.Element;
-
-import static java.lang.System.exit;
-
 
 public class Client {
 	private Socket clientSocket;
@@ -34,8 +29,8 @@ public class Client {
 		final char resp[] = new char[200];
 		out.write(msg.getBytes());
 		out.flush();
-		int noOfChar = in.read(resp);
-		return new String(resp, 0, noOfChar);
+		int numChars = in.read(resp);
+		return new String(resp, 0, numChars);
 	}
 
 	public void stopConnection() throws IOException {
@@ -82,8 +77,3 @@ public class Client {
 	}
 
 }
-
-/*
- * in_msg = client.sendMessage("RESC ALL" + " " + res[4] + " " + res[5] + " " +
- * res[6]);
- */
