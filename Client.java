@@ -1,15 +1,19 @@
 import java.net.*;
 import java.io.*;
+import java.sql.SQLOutput;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import com.Parser;
 import com.Server;
 import com.ServerConfig;
 import org.w3c.dom.Element;
 
+import static java.lang.System.exit;
+
 
 public class Client {
 	private Socket clientSocket;
-	private DataOutputStream out;
+	private OutputStream out;
 	private BufferedReader in;
 	private String ipAddress;
 	private int port;
@@ -19,47 +23,33 @@ public class Client {
 		this.port = port;
 	}
 
-	public void startConnection() {
-		try {
-			System.out.println("Attempting Connection: " + this.ipAddress + ":" + this.port);
-			clientSocket = new Socket(this.ipAddress, this.port);
-			out = new DataOutputStream(clientSocket.getOutputStream());
-			in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-		} catch (final Exception e) {
-			System.out.println(e);
-		}
+	public void startConnection() throws IOException {
+		System.out.println("Attempting Connection: " + this.ipAddress + ":" + this.port);
+		clientSocket = new Socket(this.ipAddress, this.port);
+		out = clientSocket.getOutputStream();
+		in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 	}
 
-	public String sendMessage(final String msg) {
+	public String sendMessage(final String msg) throws IOException { //printing empty arrays fixed
 		final char resp[] = new char[200];
-		try {
-			out.write(msg.getBytes());
-			out.flush();
-			in.read(resp);
-			return new String(resp);
-		} catch (final Exception e) {
-			System.out.println(e);
-		}
-		return new String(resp);
+		out.write(msg.getBytes());
+		out.flush();
+		int noOfChar = in.read(resp);
+		return new String(resp, 0, noOfChar);
 	}
 
-	public void stopConnection() {
-		try {
-			in.close();
-			out.close();
-			clientSocket.close();
-		} catch (final Exception e) {
-			System.out.println(e);
-		} finally {
-		}
+	public void stopConnection() throws IOException {
+		in.close();
+		out.close();
+		clientSocket.close();
 	}
 
-	String schedule_job(String jobID, Server server) {
+	public String schedule_job(String jobID, Server server) throws IOException{
 		String status = this.sendMessage("SCHD " + jobID + " " + server.getType() + " 0");
 		return status;
 	}
 
-	public static void main(final String args[]) {
+	public static void main(final String args[]) throws	IOException {
 
 		final Client client = new Client("127.0.0.1", 50000);
 		client.startConnection();
@@ -72,15 +62,11 @@ public class Client {
 		in_msg = client.sendMessage("AUTH root");
 		System.out.println(in_msg);
 		if (in_msg.contains("OK")){
-			try {
-				//TimeUnit.SECONDS.sleep(10);
-				Parser parser = new Parser("./ds-sim/system.xml");
-				System.out.println("Parsing system.xml");
-				Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
-				parser.convertAttribs(server_root.getElementsByTagName("server"), serverConfig);
-			} catch(Exception e){
-				e.printStackTrace();
-			}
+			//TimeUnit.SECONDS.sleep(10);
+			Parser parser = new Parser("./ds-sim/system.xml");
+			System.out.println("Parsing system.xml");
+			Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
+			parser.convertAttribs(server_root.getElementsByTagName("server"), serverConfig);
 		}
 		System.out.println(serverConfig.getLargest().toString());
 
