@@ -3,14 +3,15 @@ import java.io.*;
 import java.sql.SQLOutput;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
-import com.Parser;
-import com.Server;
+import com.Parser; 
+import com.Server; //Parser,server and server config 
+imported into this client class //are not java libraries but other areas of our assignemnt
 import com.ServerConfig;
 import org.w3c.dom.Element;
 
 import static java.lang.System.exit;
-
-
+//Above we have important all of the libraries we will use for this Client side dataset. 
+//Bellow is the entire data block for the Client class 
 public class Client {
 	private Socket clientSocket;
 	private OutputStream out;
@@ -18,16 +19,16 @@ public class Client {
 	private String ipAddress;
 	private int port;
 
-	public Client(final String ip, final int port){
-		this.ipAddress = ip;
+	public Client(final String ip, final int port){ //This code sets the public Client class as the IP Address as well as port number of the Client side
+ 		this.ipAddress = ip; 
 		this.port = port;
 	}
 
 	public void startConnection() throws IOException {
-		System.out.println("Attempting Connection: " + this.ipAddress + ":" + this.port);
+		System.out.println("Attempting Connection: " + this.ipAddress + ":" + this.port); // Displays attempting connection as well as IP address anad port of target when attempting to make a connection with server side
 		clientSocket = new Socket(this.ipAddress, this.port);
-		out = clientSocket.getOutputStream();
-		in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+		out = clientSocket.getOutputStream(); //output stream
+		in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream())); //input stream
 	}
 
 	public String sendMessage(final String msg) throws IOException { //printing empty arrays fixed
@@ -38,10 +39,10 @@ public class Client {
 		return new String(resp, 0, noOfChar);
 	}
 
-	public void stopConnection() throws IOException {
-		in.close();
-		out.close();
-		clientSocket.close();
+	public void stopConnection() throws IOException { //This code block is used to stop connections. 
+		in.close(); //input is closed
+		out.close(); //output is closed
+		clientSocket.close();//clientsocket is closed 
 	}
 
 	public String schedule_job(String jobID, Server server) throws IOException{
@@ -52,10 +53,10 @@ public class Client {
 	public static void main(final String args[]) throws	IOException {
 
 		final Client client = new Client("127.0.0.1", 50000);
-		client.startConnection();
+		client.startConnection();//start connection
 
-		ServerConfig serverConfig = new ServerConfig();
-
+		ServerConfig serverConfig = new ServerConfig(); //apply the server configuration 
+		//code bellow is relevant between creating the communication between client and server side 
 		String in_msg = "";
 		in_msg = client.sendMessage("HELO");
 		System.out.println(in_msg);
@@ -68,7 +69,7 @@ public class Client {
 			Element server_root = (Element) parser.root.getElementsByTagName("servers").item(0);
 			parser.convertAttribs(server_root.getElementsByTagName("server"), serverConfig);
 		}
-		System.out.println(serverConfig.getLargest().toString());
+		System.out.println(serverConfig.getLargest().toString()); //code and bellow is necessary for getting largest as specified
 
 		in_msg = client.sendMessage("REDY");
 		while (in_msg.contains("JOBN")) {
